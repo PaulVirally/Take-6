@@ -1,5 +1,5 @@
 # Take 6 Simulation
-This is a quick way to test out various strategies for the game [Take 6](https://en.wikipedia.org/wiki/6_Nimmt!)
+This is a quick way to test out various strategies for the game [Take 6](https://en.wikipedia.org/wiki/6_Nimmt!).
 
 ## Results
 Here are the results for the strategies I came up with after 1 million games played:
