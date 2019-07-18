@@ -22,10 +22,11 @@ for i in range(1, 105):
 deck = list(range(1, 105))
 
 wins = [0, 0, 0, 0, 0]
-avg_scores = [0, 0, 0, 0, 0]
 total_scores = [0, 0, 0, 0, 0]
 
-for i in range(1000000):
+num_games = 10000
+
+for i in range(num_games):
     cards = random.sample(deck, 10*5 + 4)
     players = [RandomPlayer(cards[:10], 0),
                SmallPlayer(cards[10:20], 1),
@@ -69,23 +70,23 @@ for i in range(1000000):
     
     min_index, _ = min(enumerate(scores), key=lambda x: x[1])
     wins[min_index] += 1
-    avg_scores = [(avg_scores[x]*i + scores[x])/(i+1) for x in range(len(avg_scores))]
     total_scores = [total_scores[x] + scores[x] for x in range(len(total_scores))]
 
 plt.title('Strategy Distribution')
 
-plt.subplot(3, 1, 1)
+plt.subplot(2, 1, 1)
 plt.ylabel('Win Percentage')
-plt.bar(range(5), [100*x/sum(wins) for x in wins], color='blue')
+win_percs = [100*x/sum(wins) for x in wins]
+plt.bar(range(5), win_percs, color='blue')
 plt.xticks([])
+for idx, win_perc in enumerate(win_percs):
+    plt.text(idx, win_perc - 5, str(win_perc) + '%', color='white', horizontalalignment='center')
 
-plt.subplot(3, 1, 2)
+plt.subplot(2, 1, 2)
 plt.ylabel('Average Score')
-plt.bar(range(5), avg_scores, color='green')
-plt.xticks([])
-
-plt.subplot(3, 1, 3)
-plt.ylabel('Total Score')
-plt.bar(['Random', 'Small', 'Big', 'HeuristicSmall', 'HeuristicBig'], total_scores, color='red')
+avg_scores = [x/num_games for x in total_scores]
+plt.bar(['Random', 'Small', 'Big', 'HeuristicSmall', 'HeuristicBig'], avg_scores, color='green')
+for idx, avg_score in enumerate(avg_scores):
+    plt.text(idx, avg_score - 3, str(avg_score), color='white', horizontalalignment='center')
 
 plt.show()
