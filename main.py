@@ -1,10 +1,11 @@
 import random
 import matplotlib.pyplot as plt
+from BigPlayer import BigPlayer
+from ClosePlayer import ClosePlayer
+from HeuristicBigPlayer import HeuristicBigPlayer
+from HeuristicSmallPlayer import HeuristicSmallPlayer
 from RandomPlayer import RandomPlayer
 from SmallPlayer import SmallPlayer
-from BigPlayer import BigPlayer
-from HeuristicSmallPlayer import HeuristicSmallPlayer
-from HeuristicBigPlayer import HeuristicBigPlayer
 
 card_vals = []
 for i in range(1, 105):
@@ -21,20 +22,21 @@ for i in range(1, 105):
 
 deck = list(range(1, 105))
 
-wins = [0, 0, 0, 0, 0]
-total_scores = [0, 0, 0, 0, 0]
+wins = [0, 0, 0, 0, 0, 0]
+total_scores = [0, 0, 0, 0, 0, 0]
 
-num_games = 10000
+num_games = 1000000
 
 for i in range(num_games):
-    cards = random.sample(deck, 10*5 + 4)
+    cards = random.sample(deck, 10*6 + 4)
     players = [RandomPlayer(cards[:10], 0),
                SmallPlayer(cards[10:20], 1),
                BigPlayer(cards[20:30], 2),
                HeuristicSmallPlayer(cards[30:40], 3),
-               HeuristicBigPlayer(cards[40:50], 4)]
-    scores = [0, 0, 0, 0, 0]
-    table = [[cards[40]], [cards[41]], [cards[42]], [cards[43]]]
+               HeuristicBigPlayer(cards[40:50], 4),
+               ClosePlayer(cards[50:60], 5)]
+    scores = [0, 0, 0, 0, 0, 0]
+    table = [[cards[50]], [cards[51]], [cards[52]], [cards[53]]]
 
     for turn in range(10):
         to_play = sorted([(x.play(table), x.name) for x in players])
@@ -77,15 +79,15 @@ plt.title('Strategy Distribution')
 plt.subplot(2, 1, 1)
 plt.ylabel('Win Percentage')
 win_percs = [100*x/sum(wins) for x in wins]
-plt.bar(range(5), win_percs, color='blue')
+plt.bar(range(6), win_percs, color='blue')
 plt.xticks([])
 for idx, win_perc in enumerate(win_percs):
-    plt.text(idx, win_perc - 5, str(win_perc) + '%', color='white', horizontalalignment='center')
+    plt.text(idx, win_perc - 4, str(win_perc) + '%', color='white', horizontalalignment='center')
 
 plt.subplot(2, 1, 2)
 plt.ylabel('Average Score')
 avg_scores = [x/num_games for x in total_scores]
-plt.bar(['Random', 'Small', 'Big', 'HeuristicSmall', 'HeuristicBig'], avg_scores, color='green')
+plt.bar(['Random', 'Small', 'Big', 'HeuristicSmall', 'HeuristicBig', 'Close'], avg_scores, color='green')
 for idx, avg_score in enumerate(avg_scores):
     plt.text(idx, avg_score - 3, str(avg_score), color='white', horizontalalignment='center')
 
